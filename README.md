@@ -4,3 +4,4 @@ The .conf, dynamic configuration platform, is designed to provide developers wit
 
 ## Documents
 1. [HLD](./documents/HLD.md)
+2. [LLD](./documents/LLD.md)
