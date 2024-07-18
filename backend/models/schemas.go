@@ -1,0 +1,64 @@
+package models
+
+type Company struct {
+	ID           int64  `json:"id"`
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	AdminId      string `json:"admin_id"`
+	RegisteredOn string `json:"registered_on"`
+	ModifiedOn   string `json:"modified_on,omitempty"`
+	DocumentPath string `json:"document_path"`
+}
+
+type User struct {
+	ID           string     `json:"id"`
+	Email        string     `json:"email"`
+	Name         string     `json:"name"`
+	Password     string     `json:"password"`
+	Role         Role       `json:"role"`
+	CompanyID    int64      `json:"company_id"`
+	Status       UserStatus `json:"status"`
+	RegisteredOn string     `json:"registered_on"`
+}
+
+type Service struct {
+	ID         string   `json:"id"`
+	Name       string   `json:"name"`
+	Owners     []string `json:"owners"`
+	CompanyID  int64    `json:"company_id"`
+	ServiceKey string   `json:"service_key"`
+	CreatedBy  string   `json:"created_by"`
+	CreatedOn  string   `json:"created_on"`
+	ModifiedBy string   `json:"modified_by,omitempty"`
+	ModifiedOn string   `json:"modified_on,omitempty"`
+}
+
+type Config struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Type        Type   `json:"type"`
+	Value       any    `json:"value"`
+	ServiceID   string `json:"service_id"`
+	CreatedBy   string `json:"created_by"`
+	CreatedOn   string `json:"created_on"`
+	ModifiedBy  string `json:"modified_by,omitempty"`
+	ModifiedOn  string `json:"modified_on,omitempty"`
+}
+
+type ConfigRequest struct {
+	ID         int64         `json:"id"`
+	ServiceId  string        `json:"service_id"`
+	ConfigID   string        `json:"config_id"`
+	ApprovedBy string        `json:"approved_by,omitempty"`
+	ApprovedOn string        `json:"approved_on,omitempty"`
+	Status     RequestStatus `json:"status"`
+}
+
+type Comment struct {
+	ID        int64  `json:"id"`
+	RequestID string `json:"request_id"`
+	Message   string `json:"message"`
+	UserEmail string `json:"user_email"`
+	On        string `json:"on"`
+}
