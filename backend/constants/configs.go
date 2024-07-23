@@ -6,4 +6,9 @@ const (
 	DbUser     = "DATABASE_USER"
 	DbPassword = "DATABASE_PASSWORD"
 	DbName     = "DATABASE_NAME"
+
+	MailHost     = "MAILING_HOST"
+	MailPort     = "MAILING_PORT"
+	MailUser     = "MAILING_USER"
+	MailPassword = "MAILING_PASSWORD"
 )
