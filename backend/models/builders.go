@@ -131,28 +131,28 @@ func (builder *UserBuilder) Build() *User {
 	}
 }
 
-type ServiceBuilder struct {
+type AppBuilder struct {
 	ID         string
 	Name       string
 	Owners     []string
 	CompanyID  int64
-	ServiceKey string
+	AppKey     string
 	CreatedBy  string
 	CreatedOn  string
 	ModifiedBy string
 	ModifiedOn string
 }
 
-func NewServiceBuilder() *ServiceBuilder {
-	serviceKey, _ := generateServiceKey()
+func NewAppBuilder() *AppBuilder {
+	appKey, _ := generateAppKey()
 	year, month, date := time.Now().Date()
 
-	return &ServiceBuilder{
+	return &AppBuilder{
 		ID:         uuid.New().String(),
 		Name:       "",
 		Owners:     []string{},
 		CompanyID:  0,
-		ServiceKey: serviceKey,
+		AppKey:     appKey,
 		CreatedBy:  "",
 		CreatedOn:  fmt.Sprintf("%02d-%02d-%d", date, month, year),
 		ModifiedBy: "",
@@ -160,39 +160,39 @@ func NewServiceBuilder() *ServiceBuilder {
 	}
 }
 
-func (builder *ServiceBuilder) SetName(name string) *ServiceBuilder {
+func (builder *AppBuilder) SetName(name string) *AppBuilder {
 	builder.Name = name
 	return builder
 }
 
-func (builder *ServiceBuilder) SetCompanyId(companyId int64) *ServiceBuilder {
+func (builder *AppBuilder) SetCompanyId(companyId int64) *AppBuilder {
 	builder.CompanyID = companyId
 	return builder
 }
 
-func (builder *ServiceBuilder) SetCreatedBy(createdBy string) *ServiceBuilder {
+func (builder *AppBuilder) SetCreatedBy(createdBy string) *AppBuilder {
 	builder.CreatedBy = createdBy
 	builder.Owners = append(builder.Owners, createdBy)
 	return builder
 }
 
-func (builder *ServiceBuilder) SetModifiedBy(modifiedBy string) *ServiceBuilder {
+func (builder *AppBuilder) SetModifiedBy(modifiedBy string) *AppBuilder {
 	builder.ModifiedBy = modifiedBy
 	return builder
 }
 
-func (builder *ServiceBuilder) SetModifiedOn(modifiedOn string) *ServiceBuilder {
+func (builder *AppBuilder) SetModifiedOn(modifiedOn string) *AppBuilder {
 	builder.ModifiedOn = modifiedOn
 	return builder
 }
 
-func (builder *ServiceBuilder) Build() *Service {
-	return &Service{
+func (builder *AppBuilder) Build() *App {
+	return &App{
 		ID:         builder.ID,
 		Name:       builder.Name,
 		Owners:     builder.Owners,
 		CompanyID:  builder.CompanyID,
-		ServiceKey: builder.ServiceKey,
+		AppKey:     builder.AppKey,
 		CreatedBy:  builder.CreatedBy,
 		CreatedOn:  builder.CreatedOn,
 		ModifiedBy: builder.ModifiedBy,

@@ -21,12 +21,12 @@ type User struct {
 	RegisteredOn string     `json:"registered_on"`
 }
 
-type Service struct {
+type App struct {
 	ID         string   `json:"id" gorm:"primaryKey"`
 	Name       string   `json:"name"`
 	Owners     []string `json:"owners"`
 	CompanyID  int64    `json:"company_id"`
-	ServiceKey string   `json:"service_key" gorm:"unique"`
+	AppKey     string   `json:"app_key" gorm:"unique"`
 	CreatedBy  string   `json:"created_by"`
 	CreatedOn  string   `json:"created_on"`
 	ModifiedBy string   `json:"modified_by,omitempty"`

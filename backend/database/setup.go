@@ -28,7 +28,7 @@ func Initialize() error {
 
 	err = db.AutoMigrate(
 		&models.Comment{},
-		&models.Service{},
+		&models.App{},
 		&models.User{},
 		&models.Config{},
 		&models.Company{},

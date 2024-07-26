@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func generateServiceKey() (string, error) {
+func generateAppKey() (string, error) {
 	length := 16
 	bytes := make([]byte, length/2)
 	if _, err := rand.Read(bytes); err != nil {
