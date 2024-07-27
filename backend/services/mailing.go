@@ -8,11 +8,6 @@ import (
 	"sync"
 )
 
-type IMailingService interface {
-	SendMail(subject, content string, to ...string)
-	address() string
-}
-
 type MailingService struct {
 	host     string
 	port     int
@@ -23,23 +18,19 @@ type MailingService struct {
 var instance *MailingService
 var once sync.Once
 
-func newMailingService() *MailingService {
+func NewMailingService() {
 	config := configs.NewMailingConfig()
-	return &MailingService{
-		host:     config.Host,
-		port:     config.Port,
-		password: config.Password,
-		from:     config.From,
-	}
+	once.Do(func() {
+		instance = &MailingService{
+			host:     config.Host,
+			port:     config.Port,
+			password: config.Password,
+			from:     config.From,
+		}
+	})
 }
 
 func GetMailingService() *MailingService {
-	if instance == nil {
-		once.Do(func() {
-			instance = newMailingService()
-		})
-	}
-
 	return instance
 }
 

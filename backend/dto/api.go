@@ -1,6 +1,8 @@
 package dto
 
-import "dot_conf/services"
+import (
+	"dot_conf/services"
+)
 
 type Response struct {
 	StatusCode int         `json:"statusCode"`
@@ -11,5 +13,5 @@ type Response struct {
 }
 
 type Handler struct {
-	CompanyService services.CompanyService
+	CompanyService services.ICompanyService
 }
