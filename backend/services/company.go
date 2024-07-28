@@ -20,7 +20,7 @@ type ICompanyService interface {
 }
 
 type CompanyService struct {
-	mail *MailingService
+	mail IMailingService
 	db   *gorm.DB
 }
 

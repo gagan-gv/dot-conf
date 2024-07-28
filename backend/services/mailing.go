@@ -8,6 +8,10 @@ import (
 	"sync"
 )
 
+type IMailingService interface {
+	SendMail(subject, content string, to ...string) error
+}
+
 type MailingService struct {
 	host     string
 	port     int
@@ -30,7 +34,7 @@ func NewMailingService() {
 	})
 }
 
-func GetMailingService() *MailingService {
+func GetMailingService() IMailingService {
 	return instance
 }
 
