@@ -1,6 +1,9 @@
 package configs
 
-import "dot_conf/constants"
+import (
+	"dot_conf/constants"
+	"dot_conf/utils"
+)
 
 type DatabaseConfig struct {
 	Host     string
@@ -14,7 +17,7 @@ type DatabaseConfig struct {
 func NewDatabaseConfig() *DatabaseConfig {
 	return &DatabaseConfig{
 		Host:     getConfigFromEnvOrDefault(constants.DbHost, constants.HOST).(string),
-		Port:     getConfigFromEnvOrDefault(constants.DbPort, constants.PORT).(int),
+		Port:     utils.ConvertToInt(getConfigFromEnvOrDefault(constants.DbPort, constants.PORT)),
 		User:     getConfigFromEnvOrDefault(constants.DbUser, constants.USER).(string),
 		Password: getConfigFromEnvOrDefault(constants.DbPassword, constants.PASSWORD).(string),
 		DbName:   getConfigFromEnvOrDefault(constants.DbName, constants.DB_NAME).(string),

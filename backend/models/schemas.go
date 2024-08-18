@@ -24,7 +24,7 @@ type User struct {
 type App struct {
 	ID         string   `json:"id" gorm:"primaryKey"`
 	Name       string   `json:"name"`
-	Owners     []string `json:"owners"`
+	Owners     []string `json:"owners" gorm:"type:text[]"`
 	CompanyID  int64    `json:"company_id"`
 	AppKey     string   `json:"app_key" gorm:"unique"`
 	CreatedBy  string   `json:"created_by"`
@@ -38,7 +38,7 @@ type Config struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Type        Type   `json:"type"`
-	Value       any    `json:"value"`
+	Value       any    `json:"value" gorm:"type:text"`
 	ServiceID   string `json:"service_id"`
 	CreatedBy   string `json:"created_by"`
 	CreatedOn   string `json:"created_on"`
