@@ -24,15 +24,22 @@ func Upload(r *http.Request) (string, error) {
 	}
 	defer file.Close()
 
-	var rc dto.RegisterCompany
+	var rc *dto.RegisterCompany
 
-	err = json.NewDecoder(r.Body).Decode(&rc)
+	reqBody := r.FormValue("metadata")
+	err = json.Unmarshal([]byte(reqBody), &rc)
 	if err != nil {
 		log.Error("Unable to decode the request body due to: ", err.Error())
 		return "", err
 	}
 
-	savePath := fmt.Sprintf("%s/%s/%s/%s", constants.Root, constants.Verification, rc.CompanyName, handler.Filename)
+	directory := fmt.Sprintf("%s/%s/%s", constants.Root, constants.Verification, rc.CompanyName)
+	if err = os.MkdirAll(directory, os.ModePerm); err != nil {
+		log.Error("Unable to create the directory due to: ", err.Error())
+		return "", err
+	}
+
+	savePath := fmt.Sprintf("%s/%s", directory, handler.Filename)
 	outFile, err := os.Create(savePath)
 	if err != nil {
 		log.Error("Unable to save the file due to: ", err.Error())

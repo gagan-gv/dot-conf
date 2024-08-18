@@ -4,6 +4,7 @@ import (
 	"dot_conf/constants"
 	"dot_conf/database"
 	"dot_conf/handlers"
+	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -15,19 +16,21 @@ func Initialize() {
 		log.Error("Error initializing database, ", err)
 		return
 	}
+	log.Info("Database setup successful")
 
 	// Handlers
 	companyHandler := handlers.NewCompanyHandler()
 
 	// Endpoint Setup
-	server := http.NewServeMux()
-	server.HandleFunc(constants.ApiV1+constants.CompanyPath+constants.Register, companyHandler.Register)
-	server.HandleFunc(constants.ApiV1+constants.CompanyPath+constants.Update+constants.CompanyId, companyHandler.Update)
-	server.HandleFunc(constants.ApiV1+constants.CompanyPath+constants.Fetch+constants.CompanyId, companyHandler.Fetch)
-	server.HandleFunc(constants.ApiV1+constants.CompanyPath+constants.Fetch, companyHandler.FetchAll)
+	server := mux.NewRouter()
+	server.HandleFunc(constants.ApiV1+constants.CompanyPath, companyHandler.Register).Methods(http.MethodPost)
+	server.HandleFunc(constants.ApiV1+constants.CompanyPath+constants.CompanyId, companyHandler.Update).Methods(http.MethodPatch)
+	server.HandleFunc(constants.ApiV1+constants.CompanyPath+constants.CompanyId, companyHandler.Fetch).Methods(http.MethodGet)
+	server.HandleFunc(constants.ApiV1+constants.CompanyPath, companyHandler.FetchAll).Methods(http.MethodGet)
 	err = http.ListenAndServe(":9898", server)
 	if err != nil {
 		log.Error("Failed to listen at port 9898: ", err)
 		return
 	}
+	log.Info("Listening at port 9898")
 }

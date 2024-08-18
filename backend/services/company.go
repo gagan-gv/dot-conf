@@ -32,11 +32,12 @@ func NewCompanyService() ICompanyService {
 }
 
 func (s *CompanyService) Register(r *http.Request) dto.Response {
-	var rc dto.RegisterCompany
+	var rc *dto.RegisterCompany
 
-	err := json.NewDecoder(r.Body).Decode(&rc)
+	reqBody := r.FormValue("metadata")
+	err := json.Unmarshal([]byte(reqBody), &rc)
 	if err != nil {
-		log.Error("Unable to decode the request body due to: ", err.Error())
+		log.Error("Unable to decode the request body due to: ", err)
 		return utils.NewErrorResponse(http.StatusInternalServerError, constants.GeneralError, err.Error())
 	}
 
@@ -98,7 +99,7 @@ func (s *CompanyService) Register(r *http.Request) dto.Response {
 
 func (s *CompanyService) FetchAll() dto.Response {
 	var companies []models.Company
-	result := s.db.Find(companies)
+	result := s.db.Find(&companies)
 
 	if result.Error != nil {
 		log.Error("Could not fetch all companies due to: ", result.Error)

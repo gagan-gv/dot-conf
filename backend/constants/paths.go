@@ -8,9 +8,6 @@ const (
 	// Endpoint Paths
 	ApiV1       = "/api/v1"
 	CompanyPath = "/companies"
-	Register    = "/register"
-	Fetch       = "/fetch"
-	Update      = "/update"
 
 	// Path Variables
 	CompanyId = "/{companyId}"
