@@ -8,6 +8,7 @@ const (
 	// Endpoint Paths
 	ApiV1       = "/api/v1"
 	CompanyPath = "/companies"
+	UserPath    = "/user"
 
 	// Path Variables
 	CompanyId = "/{companyId}"

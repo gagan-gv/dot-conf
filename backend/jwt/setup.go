@@ -6,6 +6,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -38,16 +39,12 @@ func Generate(username, role string) (string, error) {
 func Verify(role string) func(handler http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			cookie, err := r.Cookie("token")
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusUnauthorized)
-				return
-			}
-
-			tokenStr := cookie.Value
+			reqToken := r.Header.Get("Authorization")
+			splitToken := strings.Split(reqToken, "Bearer ")
+			reqToken = splitToken[1]
 			claims := &jwt.MapClaims{}
 
-			token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
+			token, err := jwt.ParseWithClaims(reqToken, claims, func(token *jwt.Token) (interface{}, error) {
 				return secretKey, nil
 			})
 

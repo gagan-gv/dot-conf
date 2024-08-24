@@ -23,14 +23,19 @@ func Initialize() {
 
 	// Endpoint Setup
 	server := mux.NewRouter()
+
+	// Company Routes
 	server.HandleFunc(constants.ApiV1+constants.CompanyPath, companyHandler.Register).Methods(http.MethodPost)
 	server.HandleFunc(constants.ApiV1+constants.CompanyPath+constants.CompanyId, companyHandler.Update).Methods(http.MethodPatch)
 	server.HandleFunc(constants.ApiV1+constants.CompanyPath+constants.CompanyId, companyHandler.Fetch).Methods(http.MethodGet)
 	server.HandleFunc(constants.ApiV1+constants.CompanyPath, companyHandler.FetchAll).Methods(http.MethodGet)
+
+	// User Routes
+
+	// Init Listen
 	err = http.ListenAndServe(":9898", server)
 	if err != nil {
 		log.Error("Failed to listen at port 9898: ", err)
 		return
 	}
-	log.Info("Listening at port 9898")
 }
