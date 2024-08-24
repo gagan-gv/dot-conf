@@ -11,4 +11,6 @@ const (
 	MailPort     = "MAILING_PORT"
 	MailUser     = "MAILING_USER"
 	MailPassword = "MAILING_PASSWORD"
+
+	JwtSecretKey = "JWT_SECRET_KEY"
 )

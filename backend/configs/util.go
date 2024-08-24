@@ -1,6 +1,13 @@
 package configs
 
-import "github.com/spf13/viper"
+import (
+	"dot_conf/constants"
+	"github.com/spf13/viper"
+)
+
+const (
+	defaultKey = "default-key"
+)
 
 func getConfigFromEnvOrDefault(configName string, defaultValue any) any {
 	viper.SetConfigFile(".env")
@@ -15,4 +22,8 @@ func getConfigFromEnvOrDefault(configName string, defaultValue any) any {
 		return defaultValue
 	}
 	return value
+}
+
+func GetJwtSecretKey() []byte {
+	return getConfigFromEnvOrDefault(constants.JwtSecretKey, defaultKey).([]byte)
 }

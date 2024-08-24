@@ -1,6 +1,8 @@
 package constants
 
 const (
+	AppName = "dot-conf"
+
 	// Error Messages
 	GeneralError              = "Oops! Something went wrong"
 	UnableToSaveData          = "We weren't able to save the data. Please try again"
