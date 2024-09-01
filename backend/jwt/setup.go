@@ -4,6 +4,7 @@ import (
 	"dot_conf/configs"
 	"dot_conf/constants"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
@@ -36,11 +37,16 @@ func Generate(username, role string) (string, error) {
 	return token, nil
 }
 
-func Verify(role string) func(handler http.Handler) http.Handler {
+func Verify(role string) mux.MiddlewareFunc {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			reqToken := r.Header.Get("Authorization")
 			splitToken := strings.Split(reqToken, "Bearer ")
+			if len(splitToken) != 2 {
+				log.Info("JWT Token not found")
+				http.Error(w, "Invalid/Missing Token", http.StatusUnauthorized)
+				return
+			}
 			reqToken = splitToken[1]
 			claims := &jwt.MapClaims{}
 

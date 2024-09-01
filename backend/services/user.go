@@ -15,7 +15,7 @@ import (
 type IUserService interface {
 	Register(details dto.UserDetails, companyId int64) dto.Response
 	Login(details dto.UserDetails) dto.Response
-	Deactivate(email string) dto.Response
+	Deactivate(email string, companyId int64) dto.Response
 }
 
 type UserService struct {
@@ -62,17 +62,12 @@ func (u *UserService) Login(details dto.UserDetails) dto.Response {
 		return utils.NewErrorResponse(http.StatusUnprocessableEntity, constants.CredentialsMissing, constants.CredentialsMissing)
 	}
 
-	if (!database.EmailAlreadyExists(details.Email, &models.User{})) {
-		log.Info("User with this email doesn't exists")
-		return utils.NewErrorResponse(http.StatusBadRequest, constants.UserNotFound, constants.UserNotFound)
-	}
-
 	var user models.User
 	err := database.FindByEmail(details.Email, &user).Error
 
 	if err != nil {
-		log.Error("Failed while finding the user", err)
-		return utils.NewErrorResponse(http.StatusInternalServerError, constants.CouldNotFetchFromDatabase, err.Error())
+		log.Error("User with this email doesn't exists", err)
+		return utils.NewErrorResponse(http.StatusBadRequest, constants.UserNotFound, err.Error())
 	}
 
 	if details.Password != user.Password {
@@ -94,18 +89,18 @@ func (u *UserService) Login(details dto.UserDetails) dto.Response {
 	return utils.NewSuccessResponse(http.StatusOK, constants.LoggedInSuccess, constants.LoggedIn, data)
 }
 
-func (u *UserService) Deactivate(email string) dto.Response {
-	if (!database.EmailAlreadyExists(email, &models.User{})) {
-		log.Info("User with this email doesn't exists")
-		return utils.NewErrorResponse(http.StatusBadRequest, constants.UserNotFound, constants.UserNotFound)
-	}
-
+func (u *UserService) Deactivate(email string, companyId int64) dto.Response {
 	var user models.User
 	err := database.FindByEmail(email, &user).Error
 
 	if err != nil {
-		log.Error("Failed while finding the user", err)
-		return utils.NewErrorResponse(http.StatusInternalServerError, constants.CouldNotFetchFromDatabase, err.Error())
+		log.Error("User with this email doesn't exists", err)
+		return utils.NewErrorResponse(http.StatusInternalServerError, constants.UserNotFound, err.Error())
+	}
+
+	if user.CompanyID != companyId {
+		log.Info("Tried to deactivate unknown user")
+		return utils.NewErrorResponse(http.StatusBadRequest, constants.UserNotFound, constants.UserNotFound)
 	}
 
 	user.Status = models.INACTIVE

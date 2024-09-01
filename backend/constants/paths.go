@@ -8,8 +8,10 @@ const (
 	// Endpoint Paths
 	ApiV1       = "/api/v1"
 	CompanyPath = "/companies"
-	UserPath    = "/user"
+	UserPath    = "/users"
+	Auth        = "/auth"
 
 	// Path Variables
 	CompanyId = "/{companyId}"
+	EmailId   = "/{email}"
 )

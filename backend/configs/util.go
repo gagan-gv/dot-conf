@@ -25,5 +25,5 @@ func getConfigFromEnvOrDefault(configName string, defaultValue any) any {
 }
 
 func GetJwtSecretKey() []byte {
-	return getConfigFromEnvOrDefault(constants.JwtSecretKey, defaultKey).([]byte)
+	return []byte(getConfigFromEnvOrDefault(constants.JwtSecretKey, defaultKey).(string))
 }

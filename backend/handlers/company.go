@@ -67,7 +67,7 @@ func (h CompanyHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	if !ok {
 		log.Error("Unable to find the company id")
-		response := utils.NewErrorResponse(http.StatusBadRequest, constants.NoCompanyIdFound, constants.NoCompanyIdFound)
+		response := utils.NewErrorResponse(http.StatusBadRequest, constants.NoPathVariableFound, constants.NoPathVariableFound)
 		w.WriteHeader(response.StatusCode)
 		responseJson := utils.ConvertJsonToString(response, constants.NoCompanyIdFoundResponse)
 		w.Write([]byte(responseJson))
@@ -98,7 +98,7 @@ func (h CompanyHandler) Fetch(w http.ResponseWriter, r *http.Request) {
 
 	if !ok {
 		log.Error("Unable to find the company id")
-		response := utils.NewErrorResponse(http.StatusBadRequest, constants.NoCompanyIdFound, constants.NoCompanyIdFound)
+		response := utils.NewErrorResponse(http.StatusBadRequest, constants.NoPathVariableFound, constants.NoPathVariableFound)
 		w.WriteHeader(response.StatusCode)
 		responseJson := utils.ConvertJsonToString(response, constants.NoCompanyIdFoundResponse)
 		w.Write([]byte(responseJson))

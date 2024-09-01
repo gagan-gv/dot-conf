@@ -10,11 +10,12 @@ const (
 	UserAlreadyExists         = "User already exists"
 	CouldNotFetchFromDatabase = "Could not fetch from database"
 	FailedUpdatingData        = "Failed updating the data"
-	NoCompanyIdFound          = "No company id found"
+	NoPathVariableFound       = "No path variable found"
 	TextToIntConversionError  = "Text to int conversion error"
 	UserNotFound              = "User not found"
 	CredentialsMissing        = "Credentials are missing"
 	InvalidCredentials        = "Invalid credentials"
+	HeaderMissing             = "Header is missing"
 
 	// Success Messages
 	CompanyCreated          = "Company has been created successfully"
@@ -42,6 +43,7 @@ const (
 	NoCompanyIdFoundResponse = "{\"statusCode\": 400, \"message\": \"No company id found\", \"devMessage\": \"No company id found\"}"
 	DecodingErrorResponse    = "{\"statusCode\": 500, \"message\": \"Internal server error\", \"devMessage\": \"Error unmarshalling\"}"
 	TextToIntErrorResponse   = "{\"statusCode\": 500, \"message\": \"Internal server error\", \"devMessage\": \"Failed converting string to int\"}"
+	HeaderIsMissing          = "{\"statusCode\": 400, \"message\": \"Header is missing\", \"devMessage\": \"Header is missing\"}"
 
 	// General Strings
 	Empty = ""
