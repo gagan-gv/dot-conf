@@ -16,6 +16,8 @@ const (
 	CredentialsMissing        = "Credentials are missing"
 	InvalidCredentials        = "Invalid credentials"
 	HeaderMissing             = "Header is missing"
+	AppNotFound               = "App not found"
+	AppAlreadyExists          = "App already exists"
 
 	// Success Messages
 	CompanyCreated          = "Company has been created successfully"
@@ -23,13 +25,16 @@ const (
 	UserCreated             = "User has been created successfully"
 	DeactivatedSuccessfully = "Deactivated successfully"
 	LoggedInSuccess         = "Logged in successfully"
+	DeletedSuccessfully     = "Deleted successfully"
 
 	// Dev Messages
-	Created     = "Created"
-	Fetched     = "Fetched"
-	Updated     = "Updated"
-	Deactivated = "Deactivated"
-	LoggedIn    = "Logged in"
+	Created       = "Created"
+	Fetched       = "Fetched"
+	Updated       = "Updated"
+	Deactivated   = "Deactivated"
+	LoggedIn      = "Logged in"
+	Deleted       = "Deleted"
+	AlreadyExists = "Already exists"
 
 	// Response Keys
 	Company   = "company"
