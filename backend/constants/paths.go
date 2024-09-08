@@ -10,6 +10,7 @@ const (
 	CompanyPath = "/companies"
 	UserPath    = "/users"
 	Auth        = "/auth"
+	AppPath     = "/apps"
 
 	// Path Variables
 	CompanyId = "/{companyId}"

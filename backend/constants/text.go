@@ -18,6 +18,7 @@ const (
 	HeaderMissing             = "Header is missing"
 	AppNotFound               = "App not found"
 	AppAlreadyExists          = "App already exists"
+	Forbidden = "Forbidden"
 
 	// Success Messages
 	CompanyCreated          = "Company has been created successfully"

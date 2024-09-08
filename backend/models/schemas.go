@@ -1,5 +1,9 @@
 package models
 
+import (
+	"github.com/lib/pq"
+)
+
 type Company struct {
 	ID           int64  `json:"id" gorm:"primaryKey;autoIncrement:true"`
 	Name         string `json:"name"`
@@ -22,15 +26,15 @@ type User struct {
 }
 
 type App struct {
-	ID         string   `json:"id" gorm:"primaryKey"`
-	Name       string   `json:"name"`
-	Owners     []string `json:"owners" gorm:"type:text[]"`
-	CompanyID  int64    `json:"company_id"`
-	AppKey     string   `json:"app_key" gorm:"unique"`
-	CreatedBy  string   `json:"created_by"`
-	CreatedOn  string   `json:"created_on"`
-	ModifiedBy string   `json:"modified_by,omitempty"`
-	ModifiedOn string   `json:"modified_on,omitempty"`
+	ID         string         `json:"id" gorm:"primaryKey"`
+	Name       string         `json:"name"`
+	Owners     pq.StringArray `json:"owners" gorm:"type:text[]"`
+	CompanyID  int64          `json:"company_id"`
+	AppKey     string         `json:"app_key" gorm:"unique"`
+	CreatedBy  string         `json:"created_by"`
+	CreatedOn  string         `json:"created_on"`
+	ModifiedBy string         `json:"modified_by,omitempty"`
+	ModifiedOn string         `json:"modified_on,omitempty"`
 }
 
 type Config struct {

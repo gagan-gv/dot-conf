@@ -3,6 +3,7 @@ package jwt
 import (
 	"dot_conf/configs"
 	"dot_conf/constants"
+	"errors"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
@@ -43,7 +44,7 @@ func Verify(role string) mux.MiddlewareFunc {
 			reqToken := r.Header.Get("Authorization")
 			splitToken := strings.Split(reqToken, "Bearer ")
 			if len(splitToken) != 2 {
-				log.Info("JWT Token not found")
+				log.Info("JWT Token not found", reqToken)
 				http.Error(w, "Invalid/Missing Token", http.StatusUnauthorized)
 				return
 			}
@@ -74,4 +75,26 @@ func Verify(role string) mux.MiddlewareFunc {
 			next.ServeHTTP(w, r)
 		})
 	}
+}
+
+func GetUsername(r *http.Request) (string, error) {
+	reqToken := r.Header.Get("Authorization")
+	splitToken := strings.Split(reqToken, "Bearer ")
+	if len(splitToken) != 2 {
+		log.Info("JWT Token not found")
+		return "", errors.New("missing token")
+	}
+	reqToken = splitToken[1]
+	claims := &jwt.MapClaims{}
+
+	token, err := jwt.ParseWithClaims(reqToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return secretKey, nil
+	})
+
+	if err != nil || !token.Valid {
+		log.Error("Invalid token", err)
+		return "", errors.New("invalid token")
+	}
+
+	return claims.GetSubject()
 }

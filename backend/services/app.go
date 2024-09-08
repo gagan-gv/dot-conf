@@ -10,12 +10,13 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"net/http"
+	"slices"
 	"time"
 )
 
 type IAppService interface {
 	Add(details dto.AppRegistrationDetails, companyId int64, createdBy string) dto.Response
-	Delete(appKey string) dto.Response
+	Delete(appKey, email string) dto.Response
 	Update(appKey, updatedBy string, details dto.AppRegistrationDetails) dto.Response
 	FetchAll(companyId int64) dto.Response
 }
@@ -55,13 +56,18 @@ func (a AppService) Add(details dto.AppRegistrationDetails, companyId int64, cre
 	return utils.NewSuccessResponse(http.StatusCreated, constants.Created, constants.Created, app)
 }
 
-func (a AppService) Delete(appKey string) dto.Response {
+func (a AppService) Delete(appKey, email string) dto.Response {
 	var app *models.App
 	err := database.FindAppByKey(appKey, app).Error
 
 	if err != nil {
 		log.Error("App with the given key is not found", err)
 		return utils.NewErrorResponse(http.StatusBadRequest, constants.AppNotFound, err.Error())
+	}
+
+	if !slices.Contains(app.Owners, email) {
+		log.Info("Forbidden to delete the app")
+		return utils.NewErrorResponse(http.StatusForbidden, constants.Forbidden, constants.Forbidden)
 	}
 
 	err = a.db.Delete(app).Error
@@ -80,6 +86,11 @@ func (a AppService) Update(appKey, updatedBy string, details dto.AppRegistration
 	if err != nil {
 		log.Error("App with the given key is not found", err)
 		return utils.NewErrorResponse(http.StatusBadRequest, constants.AppNotFound, err.Error())
+	}
+
+	if !slices.Contains(app.Owners, updatedBy) {
+		log.Info("Forbidden to update the app")
+		return utils.NewErrorResponse(http.StatusForbidden, constants.Forbidden, constants.Forbidden)
 	}
 
 	if details.Name != "" {
