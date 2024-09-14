@@ -27,12 +27,10 @@ func Initialize() error {
 	log.Info("Initialized the db successfully")
 
 	err = db.AutoMigrate(
-		&models.Comment{},
 		&models.App{},
 		&models.User{},
 		&models.Config{},
 		&models.Company{},
-		&models.ConfigRequest{},
 	)
 
 	if err != nil {

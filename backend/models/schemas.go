@@ -49,20 +49,3 @@ type Config struct {
 	ModifiedBy  string `json:"modified_by,omitempty"`
 	ModifiedOn  string `json:"modified_on,omitempty"`
 }
-
-type ConfigRequest struct {
-	ID         int64         `json:"id" gorm:"primaryKey,autoIncrement:true"`
-	ServiceId  string        `json:"service_id"`
-	ConfigID   string        `json:"config_id"`
-	ApprovedBy string        `json:"approved_by,omitempty"`
-	ApprovedOn string        `json:"approved_on,omitempty"`
-	Status     RequestStatus `json:"status"`
-}
-
-type Comment struct {
-	ID        int64  `json:"id" gorm:"primaryKey,autoIncrement:true"`
-	RequestID string `json:"request_id"`
-	Message   string `json:"message"`
-	UserEmail string `json:"user_email"`
-	On        string `json:"on"`
-}

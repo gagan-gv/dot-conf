@@ -105,7 +105,7 @@ func (a AppService) Update(appKey, updatedBy string, details dto.AppRegistration
 	app.ModifiedBy = updatedBy
 	app.ModifiedOn = fmt.Sprintf("%02d-%02d-%d", date, month, year)
 
-	err = a.db.Save(app).Error
+	err = database.Update(&app)
 	if err != nil {
 		log.Error("Unable to save the app", err)
 		return utils.NewErrorResponse(http.StatusInternalServerError, constants.GeneralError, err.Error())

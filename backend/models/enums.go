@@ -2,7 +2,6 @@ package models
 
 type Role int
 type UserStatus int
-type RequestStatus int
 type Type int
 
 const (
@@ -22,16 +21,6 @@ const (
 
 func (u UserStatus) String() string {
 	return [...]string{"ACTIVATED", "DEACTIVATED"}[u]
-}
-
-const (
-	APPROVED RequestStatus = iota
-	OPEN
-	REJECTED
-)
-
-func (r RequestStatus) String() string {
-	return [...]string{"APPROVED", "OPEN", "REJECTED"}[r]
 }
 
 const (
