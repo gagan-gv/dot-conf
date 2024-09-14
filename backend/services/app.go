@@ -58,7 +58,7 @@ func (a AppService) Add(details dto.AppRegistrationDetails, companyId int64, cre
 
 func (a AppService) Delete(appKey, email string) dto.Response {
 	var app *models.App
-	err := database.FindAppByKey(appKey, app).Error
+	err := database.FindAppByKey(appKey, &app).Error
 
 	if err != nil {
 		log.Error("App with the given key is not found", err)
@@ -82,7 +82,7 @@ func (a AppService) Delete(appKey, email string) dto.Response {
 
 func (a AppService) Update(appKey, updatedBy string, details dto.AppRegistrationDetails) dto.Response {
 	var app *models.App
-	err := database.FindAppByKey(appKey, app).Error
+	err := database.FindAppByKey(appKey, &app).Error
 	if err != nil {
 		log.Error("App with the given key is not found", err)
 		return utils.NewErrorResponse(http.StatusBadRequest, constants.AppNotFound, err.Error())
