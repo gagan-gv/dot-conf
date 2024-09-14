@@ -199,3 +199,71 @@ func (builder *AppBuilder) Build() *App {
 		ModifiedOn: builder.ModifiedOn,
 	}
 }
+
+type ConfigBuilder struct {
+	Name        string
+	Description string
+	Type        Type
+	Value       any
+	ServiceID   string
+	CreatedBy   string
+	CreatedOn   string
+}
+
+func NewConfigBuilder() *ConfigBuilder {
+	year, month, date := time.Now().Date()
+	return &ConfigBuilder{
+		Name:        "",
+		Description: "",
+		Type:        STRING,
+		Value:       nil,
+		ServiceID:   "",
+		CreatedBy:   "",
+		CreatedOn:   fmt.Sprintf("%02d-%02d-%d", date, month, year),
+	}
+}
+
+func (builder *ConfigBuilder) SetName(name string) *ConfigBuilder {
+	builder.Name = name
+	return builder
+}
+
+func (builder *ConfigBuilder) SetDescription(description string) *ConfigBuilder {
+	builder.Description = description
+	return builder
+}
+
+func (builder *ConfigBuilder) SetType(typeValue Type) *ConfigBuilder {
+	builder.Type = typeValue
+	return builder
+}
+
+func (builder *ConfigBuilder) SetValue(value any) *ConfigBuilder {
+	builder.Value = value
+	return builder
+}
+
+func (builder *ConfigBuilder) SetServiceID(serviceID string) *ConfigBuilder {
+	builder.ServiceID = serviceID
+	return builder
+}
+
+func (builder *ConfigBuilder) SetCreatedBy(createdBy string) *ConfigBuilder {
+	builder.CreatedBy = createdBy
+	return builder
+}
+
+func (builder *ConfigBuilder) Build() *Config {
+	return &Config{
+		ID:          uuid.NewString(),
+		Name:        builder.Name,
+		Description: builder.Description,
+		Type:        builder.Type,
+		Value:       builder.Value,
+		ServiceID:   builder.ServiceID,
+		CreatedBy:   builder.CreatedBy,
+		CreatedOn:   builder.CreatedOn,
+		ModifiedBy:  "",
+		ModifiedOn:  "",
+	}
+}
