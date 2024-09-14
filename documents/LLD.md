@@ -31,8 +31,8 @@
    - Name (String)
    - Description (String)
    - Type (TYPE)
-   - Value (Any)
-   - Service ID (String)
+   - Value (String)
+   - App ID (String)
    - Created By (String)
    - Created On (Date Time)
    - Modified By (String)
@@ -47,6 +47,11 @@
    - USER
    - ADMIN
    - SUPER_ADMIN
+3. TYPE
+   - STRING
+   - BOOLEAN
+   - OBJECT
+   - NUMERIC
 
 ## Methods
 

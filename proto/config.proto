@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "github.com/gagan-gv/dot-conf/proto";
+option java_package = "com.dotconf";
+option java_outer_classname = "DotConfMessages";
+option java_generate_equals_and_hash = true;
+
+package configs;
+
+service ConfigService {
+    rpc Fetch(ConfigRequest) returns (ConfigResponse);
+}
+
+message ConfigRequest {
+    string configName = 1;
+    string appId = 2;
+}
+
+message ConfigResponse {
+    string value = 1;
+}
