@@ -14,6 +14,7 @@ The `.conf`, dynamic configuration platform, is designed to provide developers w
 1. Service keys should not be predictable
 ### 2.3 Extended Requirements
 1. Analytics
+2. Config requests
 ## 3. Capacity Estimations and Constraints
 Our application is a read-heavy application. There will be a lot of configuration fetch requests concurrently. Let's assume for every 10,000 fetch requests there will be 1 write request.
 
@@ -56,7 +57,8 @@ So total space required for a year for each aspect is shared below.
 1. There are relations between the records
 ### 4.2 Schema
 Since there are multiple relations and we have to store millions of records, a SQL database like MySQL, PostgreSQL, SQLite types of database would be a great fit. A SQL type of database would be a good as there are only specific set of columns required and do not require frequent changes in schema.
-![DB Schema](https://github.com/gagan-gv/dot-conf/assets/60386381/33ef01ac-6862-47e8-a54c-4e656400ddc2)
+
+![DB Schema](https://github.com/user-attachments/assets/3df07b29-d590-4661-b6e6-0205e1df484b)
 
 ## 5. Architecture
 ### 5.1 Company Registration
@@ -72,5 +74,4 @@ Since there are multiple relations and we have to store millions of records, a S
 ## 6. Caching
 We can utilize a caching mechanism to store configurations that are actively being used. These configurations can be cached for up to 30 minutes of inactivity or non-usage. An off-the-shelf caching solution such as Guava Cache can be employed for storing this data. Eviction policies can be implemented to manage the cache, where entries are evicted either based on time or when the cache storage reaches its capacity, following the Least Recently Used (LRU) eviction strategy.
 ## 7. Security and Permissions
-The primary concern for companies is ensuring controlled access to configurations using configuration names, especially given the possibility of multiple companies having similar services (e.g., UserService). One approach to mitigate this issue is by assigning separate service keys, thereby reducing access pain points and ensuring appropriate access control.
-Another crucial concern pertains to the creation and storage of configurations. While configuration creation can be delegated to either a manager or a user, the approval of configurations could be restricted to service owners. This helps maintain oversight and ensures that only authorized configurations are stored.
+The primary concern for companies is ensuring controlled access to configurations using configuration names, especially given the possibility of multiple companies having similar services (e.g., UserService). One approach to mitigate this issue is by assigning separate service keys, thereby reducing access pain points and ensuring appropriate access control. Another crucial concern pertains to the creation and storage of configurations.

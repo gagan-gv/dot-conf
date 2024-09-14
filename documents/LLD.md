@@ -16,12 +16,12 @@
    - Company ID (Long)
    - Status (USER STATUS)
    - Registered On (Date Time)
-3. Service
+3. App
    - ID (String)
    - Name (String)
    - Owner IDs (List(String))
    - Company ID (Long)
-   - Service Key (String)
+   - App Key (String)
    - Created By (String)
    - Created On (Date Time)
    - Modified By (String)
@@ -37,19 +37,6 @@
    - Created On (Date Time)
    - Modified By (String)
    - Modified On (Date Time)
-5. Config Request
-   - ID (Long)
-   - Service ID (String)
-   - Config ID (String)
-   - Approved By (String)
-   - Approved On (Date Time)
-   - Status (REQUEST STATUS)
-6. Comments
-   - ID (Long)
-   - Request ID (Long)
-   - Comment (String)
-   - User ID (String)
-   - On (Date Time)
 
 ## Enums
 
@@ -60,10 +47,6 @@
    - USER
    - ADMIN
    - SUPER_ADMIN
-3. REQUEST STATUS
-   - APPROVED
-   - OPEN
-   - REJECTED
 
 ## Methods
 
@@ -74,7 +57,6 @@
     Check if company is already registered or not based on email
     Register company
     Register Admin user
-    Mail SuperAdmin
    }
    ```
    - Fetch All (Only for SuperAdmin)
@@ -94,13 +76,6 @@
    update(UpdatedDetails, CompanyId) {
     get company by id if present else return
     update details
-   }
-   ```
-   - Verify (Only for SuperAdmin)
-   ```go
-   verify(CompanyId) {
-    get company by id if present else return
-    mail the admin
    }
    ```
 
@@ -134,18 +109,18 @@
    }
    ```
 
-3. Service
+3. App
     - Add
     ```go
     add(ServiceDetails) {
-     Check if service exists with the same name for the company
+     Check if app exists with the same name for the company
      Add service
     }
     ```
     - Delete
     ```go
     delete() {
-     Check if service exists with the service id
+     Check if service exists with the appKey
      Delete only if the user is one of the owners
      Delete all configs
      Mail all owners
@@ -154,7 +129,7 @@
     - Update (Only to update name and owners)
     ```go
     update(ServiceDetails) {
-     Check if service exists with the service id
+     Check if service exists with the appKey
      update details
      mail all owners
     }
@@ -165,80 +140,41 @@
      Get all services for the company id
     }
     ```
-    - Fetch
-    ```go
-    fetch(ServiceId) {
-     Check if service exists with the id and is for the company
-     get all the configs for the service
-    }
-    ```
 
 4. Configs
    - Add
    ```go
-   add(ConfigDetails) {
-    Check if config exists with same name
-    add config and raise a request
+   add(ConfigDetails, AppId) {
+    Check if config exists with same name in the app
+    add config
     mail the owners
    }
    ```
    - Delete (Only for owners)
    ```go
-   delete(ConfigId) {
+   delete(ConfigName, AppId) {
     Check if config exists with id only if user is the owner of service
     mail the owners
    }
    ```
    - Update
    ```go
-   update(ConfigDetails) {
+   update(ConfigDetails, AppKey) {
     Check if config exists with id
-    update config and raise a request
+    update config
     mail the owners
    }
    ```
    - Fetch All
    ```go
-   fetch(ServiceId) {
-    Fetch all configs for the service Id
+   fetch(AppId) {
+    Fetch all configs for the app Id
    }
    ```
    - Fetch
    ```go
-   fetch(ServiceId/Key, ConfigId/Name) {
-    Check if config exists by name or id in the service
+   fetch(AppKey, ConfigName) {
+    Check if config exists by name in the app
     return value or complete details
-   }
-   ```
-
-5. Config Request
-   - Get All
-   ```go
-   get(ServcieId) {
-    Get all configs for serviceId
-   }
-   ```
-   - Get
-   ```go
-   get(RequestId) {
-    Check if request exists
-    fetch all comments
-    return request details
-   }
-   ```
-   - Comment
-   ```go
-   comment(RequestId) {
-    Check if request exists
-    add/edit comment
-    Mail the requester and onwers
-   }
-   ```
-   - Update (Only for onwers)
-   ```go
-   update(RequestId) {
-    Check if request exists
-    Check if request is open
-    update status
    }
    ```
