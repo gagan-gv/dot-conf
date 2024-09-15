@@ -157,14 +157,14 @@
    ```
    - Delete (Only for owners)
    ```go
-   delete(ConfigName, AppId) {
+   delete(ConfigId) {
     Check if config exists with id only if user is the owner of service
     mail the owners
    }
    ```
    - Update
    ```go
-   update(ConfigDetails, AppKey) {
+   update(ConfigId) {
     Check if config exists with id
     update config
     mail the owners
