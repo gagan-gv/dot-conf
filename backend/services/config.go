@@ -136,9 +136,17 @@ func (c ConfigService) GetAll(appId string) []models.Config {
 }
 
 func (c ConfigService) Fetch(ctx context.Context, request *proto.ConfigRequest) (*proto.ConfigResponse, error) {
+	var app *models.App
+	err := database.FindAppByKey(request.GetAppKey(), &app).Error
+
+	if err != nil {
+		log.Error("Error fetching app: ", err)
+		return nil, errors.New("error fetching the config")
+	}
+
 	var config *models.Config
-	err := c.db.Model(&models.Config{}).
-		Where("app_id = ? AND name = ?", request.AppKey, request.ConfigName).
+	err = c.db.Model(&models.Config{}).
+		Where("app_id = ? AND name = ?", app.ID, request.GetConfigName()).
 		Find(&config).
 		Error
 
