@@ -260,7 +260,7 @@ func (builder *ConfigBuilder) Build() *Config {
 		Description: builder.Description,
 		Type:        builder.Type,
 		Value:       builder.Value,
-		ServiceID:   builder.ServiceID,
+		AppID:       builder.ServiceID,
 		CreatedBy:   builder.CreatedBy,
 		CreatedOn:   builder.CreatedOn,
 		ModifiedBy:  "",

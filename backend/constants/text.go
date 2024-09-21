@@ -18,7 +18,9 @@ const (
 	HeaderMissing             = "Header is missing"
 	AppNotFound               = "App not found"
 	AppAlreadyExists          = "App already exists"
-	Forbidden = "Forbidden"
+	Forbidden                 = "Forbidden"
+	ConfigAlreadyExists       = "Config already exists"
+	InvalidUpdateRequest      = "Invalid update request"
 
 	// Success Messages
 	CompanyCreated          = "Company has been created successfully"
@@ -29,13 +31,14 @@ const (
 	DeletedSuccessfully     = "Deleted successfully"
 
 	// Dev Messages
-	Created       = "Created"
-	Fetched       = "Fetched"
-	Updated       = "Updated"
-	Deactivated   = "Deactivated"
-	LoggedIn      = "Logged in"
-	Deleted       = "Deleted"
-	AlreadyExists = "Already exists"
+	Created        = "Created"
+	Fetched        = "Fetched"
+	Updated        = "Updated"
+	Deactivated    = "Deactivated"
+	LoggedIn       = "Logged in"
+	Deleted        = "Deleted"
+	AlreadyExists  = "Already exists"
+	InvalidRequest = "Invalid request"
 
 	// Response Keys
 	Company   = "company"

@@ -43,7 +43,7 @@ type Config struct {
 	Description string `json:"description"`
 	Type        Type   `json:"type"`
 	Value       any    `json:"value" gorm:"type:text"`
-	ServiceID   string `json:"service_id"`
+	AppID       string `json:"app_id"`
 	CreatedBy   string `json:"created_by"`
 	CreatedOn   string `json:"created_on"`
 	ModifiedBy  string `json:"modified_by,omitempty"`

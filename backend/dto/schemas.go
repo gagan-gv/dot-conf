@@ -1,5 +1,7 @@
 package dto
 
+import "dot_conf/models"
+
 type RegisterCompany struct {
 	CompanyName  string `json:"company_name"`
 	CompanyEmail string `json:"company_email"`
@@ -17,4 +19,11 @@ type UserDetails struct {
 type AppRegistrationDetails struct {
 	Name        string   `json:"name"`
 	OwnerEmails []string `json:"owner_emails"`
+}
+
+type ConfigDetails struct {
+	Name        string      `json:"name,omitempty"`
+	Description string      `json:"description,omitempty"`
+	Type        models.Type `json:"type,omitempty"`
+	Value       any         `json:"value"`
 }
