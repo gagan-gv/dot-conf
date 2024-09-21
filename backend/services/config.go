@@ -13,6 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -21,7 +22,7 @@ type IConfigService interface {
 	Delete(configId string) dto.Response
 	Update(details dto.ConfigDetails, configId, updatedBy string) dto.Response
 	Get(configId string) dto.Response
-	GetAll(appId string) []models.Config
+	GetAll(appId string) dto.Response
 	Fetch(context.Context, *proto.ConfigRequest) (*proto.ConfigResponse, error)
 }
 
@@ -30,11 +31,19 @@ type ConfigService struct {
 	mail IMailingService
 }
 
+var (
+	configServiceInstance IConfigService
+	configServiceOnce     sync.Once
+)
+
 func NewConfigService() IConfigService {
-	return &ConfigService{
-		db:   database.GetDB(),
-		mail: GetMailingService(),
-	}
+	configServiceOnce.Do(func() {
+		configServiceInstance = &ConfigService{
+			db:   database.GetDB(),
+			mail: GetMailingService(),
+		}
+	})
+	return configServiceInstance
 }
 
 func (c ConfigService) Add(details dto.ConfigDetails, appId, createdBy string) dto.Response {
@@ -126,13 +135,21 @@ func (c ConfigService) Get(configId string) dto.Response {
 	return utils.NewSuccessResponse(http.StatusOK, constants.Fetched, constants.Fetched, data)
 }
 
-func (c ConfigService) GetAll(appId string) []models.Config {
+func (c ConfigService) GetAll(appId string) dto.Response {
 	var configs []models.Config
-	c.db.Model(&models.Config{}).
+	err := c.db.Model(&models.Config{}).
 		Select("name", "description", "type").
-		Where("app_id = ?", appId).Find(&configs)
+		Where("app_id = ?", appId).Find(&configs).
+		Error
 
-	return configs
+	if err != nil {
+		log.Error("Failed to fetch configs for the app: ", appId, " ", err)
+		return utils.NewErrorResponse(http.StatusInternalServerError, constants.GeneralError, err.Error())
+	}
+
+	data := utils.BuildData()
+	utils.AddToData(data, "configs", configs)
+	return utils.NewSuccessResponse(http.StatusOK, constants.Fetched, constants.Fetched, data)
 }
 
 func (c ConfigService) Fetch(ctx context.Context, request *proto.ConfigRequest) (*proto.ConfigResponse, error) {
