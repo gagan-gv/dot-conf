@@ -13,7 +13,7 @@ service ConfigService {
 
 message ConfigRequest {
     string configName = 1;
-    string appId = 2;
+    string appKey = 2;
 }
 
 message ConfigResponse {
