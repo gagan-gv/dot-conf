@@ -11,8 +11,11 @@ const (
 	UserPath    = "/users"
 	Auth        = "/auth"
 	AppPath     = "/apps"
+	ConfigPath  = "/configs"
 
 	// Path Variables
 	CompanyId = "/{companyId}"
 	EmailId   = "/{email}"
+	AppId     = "/{appId}"
+	ConfigId  = "/{configId}"
 )

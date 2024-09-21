@@ -13,4 +13,6 @@ const (
 	MailPassword = "MAILING_PASSWORD"
 
 	JwtSecretKey = "JWT_SECRET_KEY"
+
+	AllowedHost = "ALLOWED_HOST"
 )
