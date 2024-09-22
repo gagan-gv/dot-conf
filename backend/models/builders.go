@@ -205,7 +205,7 @@ type ConfigBuilder struct {
 	Description string
 	Type        Type
 	Value       any
-	ServiceID   string
+	AppID       string
 	CreatedBy   string
 	CreatedOn   string
 }
@@ -217,7 +217,7 @@ func NewConfigBuilder() *ConfigBuilder {
 		Description: "",
 		Type:        STRING,
 		Value:       nil,
-		ServiceID:   "",
+		AppID:       "",
 		CreatedBy:   "",
 		CreatedOn:   fmt.Sprintf("%02d-%02d-%d", date, month, year),
 	}
@@ -243,8 +243,8 @@ func (builder *ConfigBuilder) SetValue(value any) *ConfigBuilder {
 	return builder
 }
 
-func (builder *ConfigBuilder) SetServiceID(serviceID string) *ConfigBuilder {
-	builder.ServiceID = serviceID
+func (builder *ConfigBuilder) SetAppID(appID string) *ConfigBuilder {
+	builder.AppID = appID
 	return builder
 }
 
@@ -260,7 +260,7 @@ func (builder *ConfigBuilder) Build() *Config {
 		Description: builder.Description,
 		Type:        builder.Type,
 		Value:       builder.Value,
-		AppID:       builder.ServiceID,
+		AppID:       builder.AppID,
 		CreatedBy:   builder.CreatedBy,
 		CreatedOn:   builder.CreatedOn,
 		ModifiedBy:  "",

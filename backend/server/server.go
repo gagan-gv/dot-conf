@@ -25,7 +25,7 @@ func Initialize() {
 }
 
 func httpServer() {
-	allowedHost := viper.GetString(constants.AllowedHost)
+	allowedHosts := getAllowedHosts()
 
 	// Handlers
 	companyHandler := handlers.NewCompanyHandler()
@@ -35,7 +35,7 @@ func httpServer() {
 
 	// Endpoint Setup
 	router := mux.NewRouter()
-	router.Use(hostRestrictionMiddleware(allowedHost))
+	router.Use(hostRestrictionMiddleware(allowedHosts))
 	adminRouter := router.PathPrefix(constants.ApiV1).Subrouter()
 	adminRouter.Use(jwt.Verify("ADMIN"))
 	superAdminRouter := router.PathPrefix(constants.ApiV1).Subrouter()
@@ -62,9 +62,9 @@ func httpServer() {
 
 	// Config Routes
 	userRouter.HandleFunc(constants.ConfigPath, configHandler.Add).Methods(http.MethodPost)
-	userRouter.HandleFunc(constants.ConfigPath, configHandler.Update).Methods(http.MethodPatch)
-	userRouter.HandleFunc(constants.ConfigPath, configHandler.Delete).Methods(http.MethodDelete)
-	userRouter.HandleFunc(constants.ConfigPath+constants.AppId, configHandler.GetAll).Methods(http.MethodGet)
+	userRouter.HandleFunc(constants.ConfigPath+constants.ConfigId, configHandler.Update).Methods(http.MethodPatch)
+	userRouter.HandleFunc(constants.ConfigPath+constants.ConfigId, configHandler.Delete).Methods(http.MethodDelete)
+	userRouter.HandleFunc(constants.ConfigPath, configHandler.GetAll).Methods(http.MethodGet)
 	userRouter.HandleFunc(constants.ConfigPath+constants.ConfigId, configHandler.Get).Methods(http.MethodGet)
 
 	// Init Listen
@@ -75,18 +75,25 @@ func httpServer() {
 	}
 }
 
-func hostRestrictionMiddleware(allowedHost string) func(http.Handler) http.Handler {
+func hostRestrictionMiddleware(allowedHosts []string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			host := r.Host
 
-			if strings.EqualFold(host, allowedHost) {
-				next.ServeHTTP(w, r)
-				return
+			for _, allowedHost := range allowedHosts {
+				if strings.EqualFold(allowedHost, host) {
+					next.ServeHTTP(w, r)
+					return
+				}
 			}
 
 			// If host is not allowed, return 403 Forbidden
 			http.Error(w, "Forbidden", http.StatusForbidden)
 		})
 	}
+}
+
+func getAllowedHosts() []string {
+	allowedHosts := viper.GetString(constants.AllowedHosts)
+	return strings.Split(allowedHosts, ",")
 }

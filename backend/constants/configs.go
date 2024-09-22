@@ -14,5 +14,5 @@ const (
 
 	JwtSecretKey = "JWT_SECRET_KEY"
 
-	AllowedHost = "ALLOWED_HOST"
+	AllowedHosts = "ALLOWED_HOSTS"
 )

@@ -53,6 +53,7 @@ const (
 	DecodingErrorResponse    = "{\"statusCode\": 500, \"message\": \"Internal server error\", \"devMessage\": \"Error unmarshalling\"}"
 	TextToIntErrorResponse   = "{\"statusCode\": 500, \"message\": \"Internal server error\", \"devMessage\": \"Failed converting string to int\"}"
 	HeaderIsMissing          = "{\"statusCode\": 400, \"message\": \"Header is missing\", \"devMessage\": \"Header is missing\"}"
+	NoConfigIdFoundResponse  = "{\"statusCode\": 400, \"message\": \"No config id found\", \"devMessage\": \"No config id found\"}"
 
 	// General Strings
 	Empty = ""

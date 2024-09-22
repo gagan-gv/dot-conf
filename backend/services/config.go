@@ -20,6 +20,7 @@ import (
 type IConfigService interface {
 	Add(details dto.ConfigDetails, appId, createdBy string) dto.Response
 	Delete(configId string) dto.Response
+	DeleteAll(appId string) error
 	Update(details dto.ConfigDetails, configId, updatedBy string) dto.Response
 	Get(configId string) dto.Response
 	GetAll(appId string) dto.Response
@@ -47,7 +48,7 @@ func NewConfigService() IConfigService {
 }
 
 func (c ConfigService) Add(details dto.ConfigDetails, appId, createdBy string) dto.Response {
-	if !database.ConfigAlreadyExists(details.Name, appId, &models.Config{}) {
+	if database.ConfigAlreadyExists(details.Name, appId, &models.Config{}) {
 		log.Info("Config already exists with app name ", details.Name, " for appId ", appId)
 		return utils.NewErrorResponse(http.StatusBadRequest, constants.ConfigAlreadyExists, constants.AlreadyExists)
 	}
@@ -57,6 +58,7 @@ func (c ConfigService) Add(details dto.ConfigDetails, appId, createdBy string) d
 		SetDescription(details.Description).
 		SetType(details.Type).
 		SetValue(details.Value).
+		SetAppID(appId).
 		SetCreatedBy(createdBy).
 		Build()
 
@@ -87,6 +89,10 @@ func (c ConfigService) Delete(configId string) dto.Response {
 	}
 
 	return utils.NewSuccessResponse(http.StatusNoContent, constants.DeletedSuccessfully, constants.Deleted, nil)
+}
+
+func (c ConfigService) DeleteAll(appId string) error {
+	return c.db.Unscoped().Where("app_id = ?", appId).Delete(&models.Config{}).Error
 }
 
 func (c ConfigService) Update(details dto.ConfigDetails, configId, updatedBy string) dto.Response {

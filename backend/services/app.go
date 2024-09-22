@@ -22,14 +22,16 @@ type IAppService interface {
 }
 
 type AppService struct {
-	mail IMailingService
-	db   *gorm.DB
+	mail   IMailingService
+	db     *gorm.DB
+	config IConfigService
 }
 
 func NewAppService() IAppService {
 	return &AppService{
-		db:   database.GetDB(),
-		mail: GetMailingService(),
+		db:     database.GetDB(),
+		mail:   GetMailingService(),
+		config: NewConfigService(),
 	}
 }
 
@@ -70,8 +72,12 @@ func (a AppService) Delete(appKey, email string) dto.Response {
 		return utils.NewErrorResponse(http.StatusForbidden, constants.Forbidden, constants.Forbidden)
 	}
 
-	err = a.db.Delete(app).Error
+	if err = a.config.DeleteAll(app.ID); err != nil {
+		log.Error("Error deleting configs: ", err)
+		return utils.NewErrorResponse(http.StatusInternalServerError, constants.GeneralError, err.Error())
+	}
 
+	err = a.db.Delete(app).Error
 	if err != nil {
 		log.Error("Error while deleting app", err)
 		return utils.NewErrorResponse(http.StatusInternalServerError, constants.GeneralError, err.Error())
