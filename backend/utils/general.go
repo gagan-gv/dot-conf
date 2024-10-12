@@ -2,6 +2,7 @@ package utils
 
 import (
 	"dot_conf/constants"
+	"encoding/base64"
 	"encoding/json"
 	log "github.com/sirupsen/logrus"
 	"strconv"
@@ -36,4 +37,17 @@ func ConvertToInt(value interface{}) int {
 	default:
 		return 0
 	}
+}
+
+func Encode(value string) string {
+	return base64.StdEncoding.EncodeToString([]byte(value))
+}
+
+func Decode(value string) (string, error) {
+	decoded, err := base64.StdEncoding.DecodeString(value)
+	if err != nil {
+		log.Error("Error in decoding: ", err)
+		return "", err
+	}
+	return string(decoded), nil
 }

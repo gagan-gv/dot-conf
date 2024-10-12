@@ -40,7 +40,7 @@ func (u *UserService) Register(details dto.UserDetails, companyId int64) dto.Res
 		SetName(details.Name).
 		SetEmail(details.Email).
 		SetCompanyId(companyId).
-		SetPassword(details.Password).
+		SetPassword(utils.Encode(details.Password)).
 		Build()
 
 	err := u.db.Save(user).Error
@@ -66,12 +66,17 @@ func (u *UserService) Login(details dto.UserDetails) dto.Response {
 	err := database.FindByEmail(details.Email, &user).Error
 
 	if err != nil {
-		log.Error("User with this email doesn't exists", err)
+		log.Error("User with this email doesn't exists ", err)
 		return utils.NewErrorResponse(http.StatusBadRequest, constants.UserNotFound, err.Error())
 	}
 
-	if details.Password != user.Password {
-		log.Info("Invalid password", details.Email)
+	actualPassword, err := utils.Decode(user.Password)
+	if err != nil {
+		return utils.NewErrorResponse(http.StatusUnprocessableEntity, constants.UserNotFound, err.Error())
+	}
+
+	if details.Password != actualPassword {
+		log.Info("Invalid password ", details.Email)
 		return utils.NewErrorResponse(http.StatusBadRequest, constants.InvalidCredentials, constants.InvalidCredentials)
 	}
 

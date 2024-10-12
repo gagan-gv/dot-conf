@@ -61,7 +61,7 @@ func (s *CompanyService) Register(r *http.Request) dto.Response {
 		SetName(rc.AdminName).
 		SetEmail(rc.AdminEmail).
 		SetRole(models.ADMIN).
-		SetPassword(rc.Password).
+		SetPassword(utils.Encode(rc.Password)).
 		SetStatus(models.ACTIVE).
 		Build()
 	company := models.NewCompanyBuilder().
