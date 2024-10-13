@@ -4,12 +4,17 @@ import (
 	"dot_conf/constants"
 	"dot_conf/database"
 	"dot_conf/handlers"
+	rpc "dot_conf/handlers/grpc"
 	"dot_conf/jwt"
+	"dot_conf/proto"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc"
+	"net"
 	"net/http"
 	"strings"
+	"sync"
 )
 
 func Initialize() {
@@ -21,10 +26,18 @@ func Initialize() {
 	}
 	log.Info("Database setup successful")
 
-	httpServer()
+	wg := new(sync.WaitGroup)
+	wg.Add(2)
+
+	go rpcServer(wg)
+	go httpServer(wg)
+
+	wg.Wait()
 }
 
-func httpServer() {
+func httpServer(wg *sync.WaitGroup) {
+	log.Info("Initializing HTTPServer")
+	defer wg.Done()
 	allowedHosts := getAllowedHosts()
 
 	// Handlers
@@ -72,6 +85,25 @@ func httpServer() {
 	if err != nil {
 		log.Error("Failed to listen at port 9898: ", err)
 		return
+	}
+}
+
+func rpcServer(wg *sync.WaitGroup) {
+	defer wg.Done()
+	lis, err := net.Listen("tcp", ":9899")
+	if err != nil {
+		log.Fatalf("Failed to listed: %v\n", err)
+	}
+
+	log.Info("Listening on port 9899")
+
+	server := grpc.NewServer()
+	proto.RegisterConfigServiceServer(server, rpc.NewConfigRpc())
+
+	err = server.Serve(lis)
+
+	if err != nil {
+		log.Fatalf("Failed to serve: %v\n", err)
 	}
 }
 

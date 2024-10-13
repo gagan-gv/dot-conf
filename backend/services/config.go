@@ -8,11 +8,13 @@ import (
 	"dot_conf/models"
 	"dot_conf/proto"
 	"dot_conf/utils"
+	"encoding/json"
 	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -30,6 +32,7 @@ type IConfigService interface {
 type ConfigService struct {
 	db   *gorm.DB
 	mail IMailingService
+	proto.ConfigServiceServer
 }
 
 var (
@@ -178,8 +181,16 @@ func (c ConfigService) Fetch(ctx context.Context, request *proto.ConfigRequest) 
 		return nil, errors.New("error fetching the config")
 	}
 
+	value, err := json.Marshal(config.Value)
+	unquotedValue, err := strconv.Unquote(string(value))
+
+	if err != nil {
+		log.Error(ctx, "Error serializing config: ", err.Error())
+		return nil, errors.New("error serializing config")
+	}
+
 	response := &proto.ConfigResponse{
-		Value: fmt.Sprintf("%v", config.Value),
+		Value: unquotedValue,
 	}
 
 	return response, nil
