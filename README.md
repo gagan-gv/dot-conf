@@ -28,8 +28,10 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 ## backend server
 cd backend
 protoc --proto_path=../proto --go_out=paths=source_relative:./proto --go-grpc_out=paths=source_relative:./proto ../proto/config.proto
-
-## java client
-cd ../java-client
-protoc --proto_path=../proto/ --java_out=build/gen ../proto/config.proto
 ```
+
+## Integration
+
+1. Build this proto in your project
+2. Create a client listening on 9899
+3. Use the get method to fetch the values for your project
